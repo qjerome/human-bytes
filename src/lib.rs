@@ -1,6 +1,6 @@
 //! # Human Bytes
 //!
-//! `human_bytes` is a library for easily handling byte sizes.
+//! `huby` is a library for easily handling byte sizes.
 //!
 //! # Crate features
 //!
@@ -15,7 +15,7 @@
 //! ## Basics
 //!
 //! ```
-//! use human_bytes::ByteSize;
+//! use huby::ByteSize;
 //!
 //! assert_eq!("42.42 KB".parse::<ByteSize>().unwrap(), ByteSize::from_kb_f64(42.42));
 //! ```
@@ -23,7 +23,7 @@
 //! ## Use with serde
 //!
 //! ```
-//! use human_bytes::ByteSize;
+//! use huby::ByteSize;
 //! use serde::{Serialize, Deserialize};
 //!
 //! #[derive(Serialize, Deserialize)]

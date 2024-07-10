@@ -12,7 +12,7 @@ mod standard;
 /// # Example
 ///
 /// ```
-/// use human_bytes::ByteSize;
+/// use huby::ByteSize;
 ///
 /// let mut kb = ByteSize::from_kb(1);
 /// let half = ByteSize::from_kb_f64(0.5);
@@ -98,7 +98,7 @@ impl ByteSize {
     /// # Example
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// assert_eq!(ByteSize::from_bytes(1024), ByteSize::from_kb(1));
     /// assert_eq!(ByteSize::from_bytes(4096), ByteSize::from_kb(4));
@@ -123,7 +123,7 @@ impl ByteSize {
     /// # Example
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// assert_eq!(ByteSize::from_kb(1024), ByteSize::from_mb(1));
     /// assert_eq!(ByteSize::from_kb(4096), ByteSize::from_mb(4));
@@ -138,7 +138,7 @@ impl ByteSize {
     /// # Example
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// assert_eq!(ByteSize::from_kb_f64(1.5), ByteSize::from_kb(1) + ByteSize::from_bytes(512));
     /// ```
@@ -199,7 +199,7 @@ impl ByteSize {
     /// Example:
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// assert_eq!(ByteSize::from_kb_f64(1.5).in_bytes(), 1536);
     /// ```
@@ -221,7 +221,7 @@ impl ByteSize {
     /// Example:
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// let kb = ByteSize::from_kb(1);
     /// assert_eq!(kb.to_string(), "1.0KB");
@@ -274,7 +274,7 @@ impl ByteSize {
     /// # Example
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// // the best to represent 2048KB is 2MB  
     /// assert!(matches!(ByteSize::from_kb(2048), ByteSize::Mega(_)))
@@ -290,7 +290,7 @@ impl ByteSize {
     /// # Example
     ///
     /// ```
-    /// use human_bytes::ByteSize;
+    /// use huby::ByteSize;
     ///
     /// assert_eq!(ByteSize::from_kb_f64(1.5).in_unit(), 1.5);
     /// assert_eq!(ByteSize::from_kb_f64(1024.0).into_mb().in_unit(), 1.0);
