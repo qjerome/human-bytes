@@ -11,7 +11,7 @@
 * `std`: Enable feature depending on the Rust standard library
 
 ## Optional
-* `serde`: Enable serialization/deserialization via [serde].
+* `serde`: Enable serialization/deserialization via [serde](https://serde.rs/).
 
 # Examples
 
