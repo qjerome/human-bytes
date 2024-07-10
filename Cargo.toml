@@ -7,6 +7,7 @@ description = "A simple crate (supporting serde) to handle byte sizes as human"
 keywords = ["#human", "#byte", "#size", "#serde"]
 readme = "README.md"
 repository = "https://github.com/qjerome/human-bytes"
+license = "GPL-3.0"
 
 
 [features]
