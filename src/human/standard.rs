@@ -91,6 +91,7 @@ impl Display for ByteSize {
 impl ByteSize {
     #[inline(always)]
     #[allow(clippy::wrong_self_convention)]
+    #[cfg(feature = "serde")]
     fn to_string_with_prec(&self, prec: usize) -> String {
         let bs = {
             // if we are below 1.0 it means we are lacking precision
