@@ -1,3 +1,4 @@
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/qjerome/human-bytes/rust.yml?style=for-the-badge)](https://github.com/qjerome/human-bytes/actions/workflows/rust.yml)
 
 <!-- cargo-rdme start -->
 
