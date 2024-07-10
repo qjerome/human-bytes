@@ -1,4 +1,6 @@
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/qjerome/human-bytes/rust.yml?style=for-the-badge)](https://github.com/qjerome/human-bytes/actions/workflows/rust.yml)
+[![Crates.io Version](https://img.shields.io/crates/v/huby?style=for-the-badge)](https://crates.io/crates/huby)
+[![docs.rs](https://img.shields.io/docsrs/lru-st?style=for-the-badge&logo=docs.rs&color=blue)](https://docs.rs/huby)
 
 <!-- cargo-rdme start -->
 
