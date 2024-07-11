@@ -89,7 +89,7 @@ impl ByteSize {
     /// Create a [ByteSize] from a given number of bits.
     /// It is not checked where `b` is a multiple of 8.
     #[inline(always)]
-    pub fn from_bits_uncheked(b: u64) -> Self {
+    pub const fn from_bits_uncheked(b: u64) -> Self {
         Self::from_bytes(b / 8)
     }
 
@@ -104,7 +104,7 @@ impl ByteSize {
     /// assert_eq!(ByteSize::from_bytes(4096), ByteSize::from_kb(4));
     /// ```
     #[inline(always)]
-    pub fn from_bytes(b: u64) -> Self {
+    pub const fn from_bytes(b: u64) -> Self {
         if b < KB {
             Self::Bytes(b)
         } else if b < MB {
@@ -129,7 +129,7 @@ impl ByteSize {
     /// assert_eq!(ByteSize::from_kb(4096), ByteSize::from_mb(4));
     /// ```
     #[inline(always)]
-    pub fn from_kb(kb: u64) -> Self {
+    pub const fn from_kb(kb: u64) -> Self {
         Self::from_bytes(kb * KB)
     }
 
@@ -149,7 +149,7 @@ impl ByteSize {
 
     /// See [ByteSize::from_kb], only change is the parameter is expressed in MB
     #[inline(always)]
-    pub fn from_mb(mb: u64) -> Self {
+    pub const fn from_mb(mb: u64) -> Self {
         Self::from_bytes(mb * MB)
     }
 
@@ -161,7 +161,7 @@ impl ByteSize {
 
     /// See [ByteSize::from_kb], only change is the parameter is expressed in GB
     #[inline(always)]
-    pub fn from_gb(gb: u64) -> Self {
+    pub const fn from_gb(gb: u64) -> Self {
         Self::from_bytes(gb * GB)
     }
 
@@ -173,7 +173,7 @@ impl ByteSize {
 
     /// See [ByteSize::from_kb], only change is the parameter is expressed in TB
     #[inline(always)]
-    pub fn from_tb(gb: u64) -> Self {
+    pub const fn from_tb(gb: u64) -> Self {
         Self::from_bytes(gb * TB)
     }
 
@@ -184,7 +184,7 @@ impl ByteSize {
     }
 
     #[inline(always)]
-    fn unit_str(&self) -> &'static str {
+    const fn unit_str(&self) -> &'static str {
         match self {
             Self::Bytes(_) => "B",
             Self::Kilo(_) => "KB",
@@ -204,7 +204,7 @@ impl ByteSize {
     /// assert_eq!(ByteSize::from_kb_f64(1.5).in_bytes(), 1536);
     /// ```
     #[inline(always)]
-    pub fn in_bytes(&self) -> u64 {
+    pub const fn in_bytes(&self) -> u64 {
         match self {
             Self::Bytes(b) => *b,
             Self::Kilo(b) => *b,
@@ -230,36 +230,36 @@ impl ByteSize {
     /// assert_eq!(kb.in_bytes(), 1024);
     /// ```
     #[inline(always)]
-    pub fn into_bytes(self) -> Self {
+    pub const fn into_bytes(self) -> Self {
         Self::Bytes(self.in_bytes())
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
-    pub fn into_kb(self) -> Self {
+    pub const fn into_kb(self) -> Self {
         Self::Kilo(self.in_bytes())
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
-    pub fn into_mb(self) -> Self {
+    pub const fn into_mb(self) -> Self {
         Self::Mega(self.in_bytes())
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
-    pub fn into_gb(self) -> Self {
+    pub const fn into_gb(self) -> Self {
         Self::Giga(self.in_bytes())
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
-    pub fn into_tb(self) -> Self {
+    pub const fn into_tb(self) -> Self {
         Self::Tera(self.in_bytes())
     }
 
     #[inline(always)]
-    fn divisor(&self) -> f64 {
+    const fn divisor(&self) -> f64 {
         match self {
             Self::Bytes(_) => 1.0,
             Self::Kilo(_) => KB as f64,
@@ -280,7 +280,7 @@ impl ByteSize {
     /// assert!(matches!(ByteSize::from_kb(2048), ByteSize::Mega(_)))
     /// ```
     #[inline(always)]
-    pub fn normalize(self) -> Self {
+    pub const fn normalize(self) -> Self {
         Self::from_bytes(self.in_bytes())
     }
 
