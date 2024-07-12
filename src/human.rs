@@ -33,6 +33,12 @@ pub enum ByteSize {
     Tera(u64),
 }
 
+impl Default for ByteSize {
+    fn default() -> Self {
+        Self::Bytes(0)
+    }
+}
+
 impl Eq for ByteSize {}
 
 impl Add for ByteSize {
