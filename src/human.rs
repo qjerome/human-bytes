@@ -3,8 +3,34 @@ use core::ops::{Add, AddAssign, Sub, SubAssign};
 #[cfg(feature = "std")]
 mod standard;
 
-/// Enum encoding a size in bytes, the data carried by
-/// the enum is always a value expressed **in bytes**.
+pub const KB: u64 = 1 << 10;
+pub const MB: u64 = 1 << 20;
+pub const GB: u64 = 1 << 30;
+pub const TB: u64 = 1 << 40;
+
+#[derive(Clone, Copy)]
+pub enum Unit {
+    Bytes,
+    Kilo,
+    Mega,
+    Giga,
+    Tera,
+}
+
+impl From<Size> for Unit {
+    #[inline(always)]
+    fn from(value: Size) -> Self {
+        match value {
+            Size::Bytes(_) => Self::Bytes,
+            Size::Kilo(_) => Self::Kilo,
+            Size::Mega(_) => Self::Mega,
+            Size::Giga(_) => Self::Giga,
+            Size::Tera(_) => Self::Tera,
+        }
+    }
+}
+
+/// Structure encoding a size in bytes.
 /// This type implements common [Add] and [Sub] traits
 /// so that it can be used to make operations on sizes
 /// expressed in bytes.
@@ -23,9 +49,14 @@ mod standard;
 /// kb -= half;
 /// assert_eq!(kb, ByteSize::from_kb(1));
 /// ```
+#[derive(Default, Clone, Copy)]
+pub struct ByteSize(Size);
+
+/// Enum encoding a size in bytes, the data carried by
+/// the enum is always a value expressed **in bytes**.
 #[derive(Clone, Copy)]
 #[repr(u64)]
-pub enum ByteSize {
+enum Size {
     Bytes(u64),
     Kilo(u64),
     Mega(u64),
@@ -33,7 +64,7 @@ pub enum ByteSize {
     Tera(u64),
 }
 
-impl Default for ByteSize {
+impl Default for Size {
     fn default() -> Self {
         Self::Bytes(0)
     }
@@ -86,11 +117,6 @@ impl PartialOrd for ByteSize {
     }
 }
 
-pub const KB: u64 = 1 << 10;
-pub const MB: u64 = 1 << 20;
-pub const GB: u64 = 1 << 30;
-pub const TB: u64 = 1 << 40;
-
 impl ByteSize {
     /// Create a [ByteSize] from a given number of bits.
     /// It is not checked where `b` is a multiple of 8.
@@ -112,15 +138,15 @@ impl ByteSize {
     #[inline(always)]
     pub const fn from_bytes(b: u64) -> Self {
         if b < KB {
-            Self::Bytes(b)
+            Self(Size::Bytes(b))
         } else if b < MB {
-            Self::Kilo(b)
+            Self(Size::Kilo(b))
         } else if b < GB {
-            Self::Mega(b)
+            Self(Size::Mega(b))
         } else if b < TB {
-            Self::Giga(b)
+            Self(Size::Giga(b))
         } else {
-            Self::Tera(b)
+            Self(Size::Tera(b))
         }
     }
 
@@ -191,12 +217,12 @@ impl ByteSize {
 
     #[inline(always)]
     const fn unit_str(&self) -> &'static str {
-        match self {
-            Self::Bytes(_) => "B",
-            Self::Kilo(_) => "KB",
-            Self::Mega(_) => "MB",
-            Self::Giga(_) => "GB",
-            Self::Tera(_) => "TB",
+        match self.0 {
+            Size::Bytes(_) => "B",
+            Size::Kilo(_) => "KB",
+            Size::Mega(_) => "MB",
+            Size::Giga(_) => "GB",
+            Size::Tera(_) => "TB",
         }
     }
 
@@ -211,12 +237,12 @@ impl ByteSize {
     /// ```
     #[inline(always)]
     pub const fn in_bytes(&self) -> u64 {
-        match self {
-            Self::Bytes(b) => *b,
-            Self::Kilo(b) => *b,
-            Self::Mega(b) => *b,
-            Self::Giga(b) => *b,
-            Self::Tera(b) => *b,
+        match self.0 {
+            Size::Bytes(b) => b,
+            Size::Kilo(b) => b,
+            Size::Mega(b) => b,
+            Size::Giga(b) => b,
+            Size::Tera(b) => b,
         }
     }
 
@@ -237,41 +263,41 @@ impl ByteSize {
     /// ```
     #[inline(always)]
     pub const fn into_bytes(self) -> Self {
-        Self::Bytes(self.in_bytes())
+        Self(Size::Bytes(self.in_bytes()))
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
     pub const fn into_kb(self) -> Self {
-        Self::Kilo(self.in_bytes())
+        Self(Size::Kilo(self.in_bytes()))
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
     pub const fn into_mb(self) -> Self {
-        Self::Mega(self.in_bytes())
+        Self(Size::Mega(self.in_bytes()))
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
     pub const fn into_gb(self) -> Self {
-        Self::Giga(self.in_bytes())
+        Self(Size::Giga(self.in_bytes()))
     }
 
     /// See [ByteSize::into_bytes]
     #[inline(always)]
     pub const fn into_tb(self) -> Self {
-        Self::Tera(self.in_bytes())
+        Self(Size::Tera(self.in_bytes()))
     }
 
     #[inline(always)]
     const fn divisor(&self) -> f64 {
-        match self {
-            Self::Bytes(_) => 1.0,
-            Self::Kilo(_) => KB as f64,
-            Self::Mega(_) => MB as f64,
-            Self::Giga(_) => GB as f64,
-            Self::Tera(_) => TB as f64,
+        match self.0 {
+            Size::Bytes(_) => 1.0,
+            Size::Kilo(_) => KB as f64,
+            Size::Mega(_) => MB as f64,
+            Size::Giga(_) => GB as f64,
+            Size::Tera(_) => TB as f64,
         }
     }
 
@@ -280,10 +306,10 @@ impl ByteSize {
     /// # Example
     ///
     /// ```
-    /// use huby::ByteSize;
+    /// use huby::{ByteSize, Unit};
     ///
     /// // the best to represent 2048KB is 2MB  
-    /// assert!(matches!(ByteSize::from_kb(2048), ByteSize::Mega(_)))
+    /// assert!(matches!(ByteSize::from_kb(2048).unit(), Unit::Mega))
     /// ```
     #[inline(always)]
     pub const fn normalize(self) -> Self {
@@ -306,6 +332,12 @@ impl ByteSize {
     #[inline(always)]
     pub fn in_unit(&self) -> f64 {
         self.in_bytes() as f64 / self.divisor()
+    }
+
+    /// Returns the [Unit] of a `ByteSize`
+    #[inline(always)]
+    pub fn unit(&self) -> Unit {
+        self.0.into()
     }
 }
 

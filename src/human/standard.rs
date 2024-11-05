@@ -59,7 +59,7 @@ impl Hash for ByteSize {
 
 impl Debug for ByteSize {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if matches!(self, ByteSize::Bytes(_)) {
+        if matches!(self.0, Size::Bytes(_)) {
             write!(f, "{:.1}{}", self.in_unit(), self.unit_str())
         } else {
             write!(
@@ -152,7 +152,7 @@ mod test {
 
     #[test]
     fn test_from_str() {
-        assert_eq!("10B".parse::<ByteSize>().unwrap(), ByteSize::Bytes(10));
+        assert_eq!("10B".parse::<ByteSize>().unwrap(), ByteSize::from_bytes(10));
         assert_eq!(
             "10.9KB".parse::<ByteSize>().unwrap(),
             ByteSize::from_kb_f64(10.9)
